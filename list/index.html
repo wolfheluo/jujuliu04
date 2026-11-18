@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f2ec">
+<meta name="description" content="以後 — 還沒去的地方，與已經一起完成的。">
+<title>以後 ‧ someday</title>
+<script>try{if(sessionStorage.getItem('juju:nav')){sessionStorage.removeItem('juju:nav');document.documentElement.classList.add('nav-arrive');}}catch(_){}</script>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../nav.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="back" href="../">← JUJU</a>
+
+<main class="list-page" id="listPage">
+
+ <div class="sheet">
+
+  <p class="line" id="line">山是地質年代及其緩慢的浪</p>
+
+  <section class="board">
+    <ul class="rows" id="open" aria-label="還沒去的"></ul>
+
+    <form class="add" id="addForm" autocomplete="off">
+      <span class="plus" aria-hidden="true">＋</span>
+      <input id="addInput" type="text" maxlength="120" placeholder="想做的事…" aria-label="新增想做的事">
+    </form>
+
+    <div class="archive" id="archive">
+      <button type="button" class="archive-toggle" id="archiveToggle" aria-expanded="false" aria-controls="done">
+        <span class="caret" aria-hidden="true">▸</span>
+        <span>已經一起完成的</span>
+        <span class="count" id="count">0</span>
+      </button>
+      <div class="done-wrap">
+        <ul class="rows done" id="done" aria-label="已經一起完成的"></ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <button type="button" class="quiet" id="exportBtn">匯出</button>
+    <span class="sep" aria-hidden="true">·</span>
+    <button type="button" class="quiet" id="importBtn">匯入</button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+  </footer>
+
+ </div>
+</main>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="curtain" aria-hidden="true"></div>
+
+<script src="app.js"></script>
+<script src="../nav.js"></script>
+</body>
+</html>

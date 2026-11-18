@@ -26,26 +26,30 @@ html.nav-arrive .curtain{ opacity: 1; transition: none; }
 
 /* ---------- 內容的微小位移 ---------- */
 .stage,
-.experience{
+.experience,
+.list-page{
   transform-origin: 50% 46%;
   transition: transform .5s cubic-bezier(.22,.61,.36,1);   /* 紙退開時，內容慢慢回到 100% */
 }
 
 html.nav-out .stage,
-html.nav-out .experience{
+html.nav-out .experience,
+html.nav-out .list-page{
   transform: scale(.9925);
   will-change: transform;
   transition: transform .34s cubic-bezier(.35,0,.2,1);   /* 出去跟紙同步 */
 }
 
 html.nav-arrive .stage,
-html.nav-arrive .experience{
+html.nav-arrive .experience,
+html.nav-arrive .list-page{
   transform: scale(.9965);
   transition: none;
 }
 
 @media (prefers-reduced-motion: reduce){
   .curtain{ transition: none; }
-  html.nav-out .stage, html.nav-out .experience,
-  html.nav-arrive .stage, html.nav-arrive .experience{ transform: none; transition: none; }
+  .stage, .experience, .list-page{ transition: none; }
+  html.nav-out .stage, html.nav-out .experience, html.nav-out .list-page,
+  html.nav-arrive .stage, html.nav-arrive .experience, html.nav-arrive .list-page{ transform: none; }
 }

@@ -185,6 +185,19 @@
   }
   body.ring .entry .en{ color: rgba(245,242,236,.6); }
 
+  /* 第三件的預告：hover 時標題被金線劃掉——這是它的語彙（完成） */
+  .entry[data-mode="list"] .t{
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    text-decoration-color: transparent;
+    transition: letter-spacing var(--t-mid) var(--ease),
+                text-decoration-color var(--t-mid) var(--ease);
+  }
+  .entry[data-mode="list"]:hover .t,
+  .entry[data-mode="list"]:focus-visible .t{
+    text-decoration-color: var(--accent);
+  }
+
   .entry:hover .n,
   .entry:focus-visible .n{ color: var(--accent); }
   .entry:hover .t,
@@ -284,7 +297,7 @@
 
     <header>
       <p class="kicker">JUJU</p>
-      <p class="kicker-sub">兩件關於同一個詞的小品</p>
+      <p class="kicker-sub">三件關於同一個詞的小品</p>
     </header>
 
     <main>
@@ -305,6 +318,11 @@
           <span class="n">02</span>
           <span class="t">我願意</span>
           <span class="en">priceless</span>
+        </a>
+        <a class="entry" href="list/" data-mode="list">
+          <span class="n">03</span>
+          <span class="t">以後</span>
+          <span class="en">someday</span>
         </a>
       </nav>
     </main>
