@@ -1,0 +1,32 @@
+/* ============================================================
+   JUJU — 共用 token
+   兩件作品原本各自一套色／字／時間感；這裡只留一組。
+   原則：紙只有一張、墨只有一種、彩色只有一個（金）。
+   ============================================================ */
+:root{
+  /* 紙與墨 */
+  --paper:      #f5f2ec;   /* Forever 的紙色 → Ring 的底也用它 */
+  --ink:        #101012;   /* Forever 的黑影 → Ring 的暗場也用它 */
+  --muted:      #96918a;   /* Forever 的 lit 字 → Ring 的說明字 */
+  --faint:      #222224;   /* 暗面裡的殘影 */
+  --hair:       #cfc9be;   /* 刻度線 */
+  --hair-dark:  #2b2b2e;
+
+  /* 唯一彩色：金（只在 Ring 出現，封面只用在 hover） */
+  --accent:      #b99a62;
+  --accent-soft: #b99a6240;
+
+  /* 字：襯線講台詞，無襯線講資料 */
+  --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:  "PingFang TC","PingFang SC","Hiragino Sans GB","Microsoft JhengHei","Noto Sans TC",-apple-system,system-ui,sans-serif;
+
+  /* 時間：只有三檔 */
+  --t-fast: .32s;
+  --t-mid:  .55s;
+  --t-slow: 1.2s;
+  --ease:   cubic-bezier(.22,.61,.36,1);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ transition:none !important; animation:none !important; }
+}

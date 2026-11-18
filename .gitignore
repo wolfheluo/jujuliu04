@@ -1,0 +1,9 @@
+# OS 雜訊
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器
+.vscode/
+.idea/
+*.swp

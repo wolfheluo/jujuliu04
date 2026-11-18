@@ -1,0 +1,189 @@
+/* ============================================================
+   Ring — Priceless
+   色／字／時間感改由 ../tokens.css 提供：
+   純白 → 紙色，近黑 → 墨色，灰 → 暖灰；金留作唯一彩色。
+   ============================================================ */
+:root{
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  color-scheme: light;
+  --unit: min(100vw, 100svh);
+}
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  overflow-x: hidden;
+  transition: background 1s ease, color 1s ease;
+}
+body.dark{
+  background: var(--ink);
+  color: var(--paper);
+  color-scheme: dark;
+}
+
+.experience{ position: relative; min-height: 560px; height: 100svh; max-width: 1440px; margin: auto; }
+
+/* ---------- 作品 ---------- */
+.artwork{
+  position: absolute; left: 50%; top: calc(50% - var(--unit)*.3333);
+  width: calc(var(--unit)*.4815); height: auto;
+  aspect-ratio: 1334/1179;
+  transform: translateX(-50%);
+}
+#images, .ring{ position: absolute; width: 100%; height: 100%; inset: 0; }
+.ring{
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity .32s ease, transform .55s ease;
+  transform: translateY(3px);
+}
+.ring.active{ opacity: 1; transform: translateY(0); }
+
+.halo{
+  position: absolute; left: 50%; top: 57%;
+  width: 48%; aspect-ratio: 1; border-radius: 50%;
+  transform: translate(-50%,-50%) scale(.92);
+  opacity: 0;
+  transition: opacity 1s, transform 1.4s;
+  filter: blur(3px);
+}
+.halo-core{
+  width: 100%; height: 100%;
+  border: 7px solid var(--paper);
+  border-radius: 50%;
+  box-shadow:
+    0 0 9px 3px rgba(245,242,236,.9),
+    0 0 25px 9px rgba(245,242,236,.55),
+    0 0 50px 16px rgba(245,242,236,.24),
+    inset 0 0 18px 5px rgba(245,242,236,.45);
+}
+.dark .halo{ opacity: 1; transform: translate(-50%,-50%) scale(1); }
+
+/* ---------- 說明 ---------- */
+.caption{ position: absolute; top: calc(50% + var(--unit)*.123); width: 100%; text-align: center; padding: 0 20px; }
+.caption h1{
+  font-size: clamp(21px, calc(var(--unit)*.0222), 28px);
+  line-height: 1.25; margin: 0 0 8px;
+  font-weight: 500; letter-spacing: -.6px;
+}
+.caption p{ margin: 0; line-height: 1.5; font-size: clamp(13px, calc(var(--unit)*.0157), 18px); }
+#description{ color: var(--muted); margin-left: 9px; }
+.dark #description{ color: inherit; }
+.caption.changed{ animation: caption-in .3s ease; }
+@keyframes caption-in{ from{ opacity:.35; transform: translateY(4px); } to{ opacity:1; transform: translateY(0); } }
+
+/* ---------- 刻度 ---------- */
+.control{
+  position: absolute; width: calc(var(--unit)*.465); left: 50%;
+  transform: translateX(-50%); top: calc(50% + var(--unit)*.27);
+  height: 70px; touch-action: pan-y;
+}
+.ruler{ height: 29px; display: flex; align-items: flex-end; justify-content: space-between; pointer-events: none; }
+.tick{
+  width: 1px; height: 5px;
+  background: #b9b2a6;
+  will-change: height;
+  transition: background .6s;
+}
+.tick.current{ background: currentColor; }
+.dark .tick{ background: var(--hair-dark); }
+.dark .tick.current{ background: var(--paper); }
+
+input[type=range]{
+  position: absolute; left: -12px; top: -14px;
+  width: calc(100% + 24px); height: 57px; margin: 0;
+  opacity: 0; cursor: pointer; touch-action: pan-y;
+}
+.control:has(input:focus-visible){ outline: 1px solid var(--muted); outline-offset: 12px; border-radius: 2px; }
+.endpoints{
+  display: flex; justify-content: space-between; margin-top: 9px;
+  font-size: clamp(11px, calc(var(--unit)*.013), 14px);
+  color: var(--muted);
+}
+.endpoints .selected{ color: inherit; }
+#rightLabel.selected{ color: var(--ink); }
+.dark #rightLabel.selected{ color: var(--paper); }
+.hint{
+  display: block; text-align: center; color: var(--muted);
+  font-size: 11px; margin-top: 22px; letter-spacing: 1px;
+  transition: opacity .4s;
+}
+.interacted .hint{ opacity: 0; }
+
+/* ---------- 承諾 ---------- */
+.promise{
+  position: absolute; top: calc(50% + var(--unit)*.347); width: 100%;
+  text-align: center; color: var(--muted);
+  font-size: clamp(16px, calc(var(--unit)*.02), 22px); letter-spacing: 3px;
+  opacity: 0;
+  transition: opacity 1.2s 1s;
+}
+.dark .promise{ opacity: 1; }
+
+footer{
+  position: absolute; bottom: 5.2%; width: 100%; text-align: center;
+  color: var(--muted); letter-spacing: 1.2px;
+  font-size: clamp(16px, calc(var(--unit)*.0185), 21px); font-weight: 300;
+}
+.dark footer{ color: rgba(245,242,236,.42); }
+
+/* ---------- 直向手機 ---------- */
+@media (max-aspect-ratio: 3/4){
+  .artwork{ width: 88vw; height: auto; top: calc(43% - 50vw); }
+  .caption{ top: calc(43% + 31vw); }
+  .control{ width: 78vw; top: calc(43% + 64vw); }
+  .promise{ top: calc(43% + 83vw); }
+  .halo-core{ border-width: 5px; }
+  footer{ bottom: 4%; }
+}
+
+/* ---------- 游標光環（金：全站唯一的彩色） ---------- */
+.tick{ transition: height .18s ease, opacity .18s ease, background .6s; will-change: auto; }
+.control::before{
+  content: ''; position: absolute; left: var(--hover-position, 50%); top: 20px;
+  width: 100px; height: 30px; transform: translate(-50%,-50%);
+  background: radial-gradient(ellipse, var(--accent-soft), transparent 70%);
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.control.hovering::before{ opacity: 1; }
+.control.dragging::before{ opacity: .65; }
+
+.pointer-aura{
+  position: fixed; z-index: 10; width: 28px; height: 28px;
+  pointer-events: none; border: 1px solid rgba(185,154,98,.36); border-radius: 50%;
+  transform: translate(-50%,-50%); opacity: 0;
+  background: radial-gradient(circle, rgba(185,154,98,.1), transparent 70%);
+  transition: width .25s, height .25s, opacity .2s, border-color .4s, background .4s;
+  box-shadow: 0 0 18px rgba(185,154,98,.06);
+}
+.pointer-aura.visible{ opacity: 1; }
+.pointer-aura.on-ruler{ width: 44px; height: 44px; border-color: rgba(185,154,98,.6); }
+.pointer-aura.pressed{ width: 22px; height: 22px; background: rgba(185,154,98,.15); }
+.dark .pointer-aura{ border-color: rgba(234,214,166,.4); box-shadow: 0 0 20px rgba(234,214,166,.1); }
+.dark .pointer-aura.on-ruler{ border-color: rgba(234,214,166,.73); }
+
+/* ---------- 回封面 ---------- */
+.back{
+  position: fixed; z-index: 20;
+  left: clamp(16px, 3vw, 34px); top: clamp(14px, 3vh, 28px);
+  font-family: var(--sans); font-size: 10px; letter-spacing: .3em;
+  color: var(--muted); text-decoration: none;
+  opacity: .45;
+  transition: opacity .4s ease, color .4s ease;
+}
+.back:hover, .back:focus-visible{ opacity: 1; color: var(--accent); outline: none; }
+
+/* ---------- 與封面同一張紙的顆粒 ---------- */
+.grain{
+  position: fixed; inset: 0; z-index: 15;
+  pointer-events: none;
+  opacity: .045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ transition: none !important; animation: none !important; }
+  .pointer-aura, .control::before{ display: none; }
+}

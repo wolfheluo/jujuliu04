@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f2ec">
+<meta name="description" content="JUJU — 兩件關於同一個詞的小品。">
+<title>JUJU</title>
+<script>try{if(sessionStorage.getItem('juju:nav')){sessionStorage.removeItem('juju:nav');document.documentElement.classList.add('nav-arrive');}}catch(_){}</script>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="nav.css">
+<style>
+  /* ============================================================
+     JUJU — 封面
+     · 紙、墨、金：全部來自 tokens.css
+     · 斜切黑影與反白字：直接沿用 Forever 的機制（同一組常數）
+     · 暗場＋光圈：直接沿用 Ring 的終點
+     ============================================================ */
+  *{ box-sizing: border-box; }
+
+  html, body{ height:100%; margin:0; }
+
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+    transition: color var(--t-slow) var(--ease);
+  }
+
+  .stage{
+    position: relative;
+    height: 100dvh;
+    overflow: hidden;
+    isolation: isolate;
+    touch-action: manipulation;
+  }
+
+  /* ---------- 暗場（Ring 的終點） ---------- */
+  .veil{
+    position: absolute; inset: 0; z-index: 1;
+    background: var(--ink);
+    opacity: 0;
+    transition: opacity 1s var(--ease);
+  }
+  body.ring{ color: var(--paper); }   /* 暗場裡的字要跟著轉成紙色 */
+  body.ring .veil{ opacity: 1; }
+
+  /* ---------- 光圈（Ring 的 halo） ---------- */
+  .halo{
+    position: absolute; z-index: 2;
+    left: 13%; top: 84%;
+    width: 52vmin; aspect-ratio: 1;
+    transform: translate(-50%,-50%) scale(.9);
+    opacity: 0; filter: blur(3px);
+    transition: opacity 1s var(--ease), transform 1.4s var(--ease);
+    pointer-events: none;
+  }
+  .halo-core{
+    width:100%; height:100%;
+    border: 6px solid var(--paper);
+    border-radius: 50%;
+    box-shadow:
+      0 0 9px 3px rgba(245,242,236,.9),
+      0 0 25px 9px rgba(245,242,236,.5),
+      0 0 50px 16px rgba(245,242,236,.22),
+      inset 0 0 18px 5px rgba(245,242,236,.45);
+  }
+  body.ring .halo{ opacity:1; transform: translate(-50%,-50%) scale(1); }
+
+  /* ---------- 版面 ---------- */
+  .page{
+    position: relative; z-index: 3;
+    height: 100%;
+    display: flex; flex-direction: column;
+    padding: clamp(22px,4.6vh,54px) clamp(20px,5.5vw,76px) clamp(16px,3.4vh,34px);
+  }
+
+  header{
+    display:flex; align-items:baseline; justify-content:flex-start;
+    gap: clamp(12px, 1.4vw, 20px);
+  }
+  .kicker{
+    margin:0;
+    font-family: var(--sans);
+    font-size: 10px; letter-spacing: .42em;
+    color: var(--muted);
+    transition: color var(--t-slow) var(--ease);
+  }
+  .kicker-sub{
+    margin:0;
+    font-family: var(--sans);
+    font-size: 10px; letter-spacing:.18em;
+    color: var(--muted);
+    transition: color var(--t-slow) var(--ease);
+  }
+  .kicker-sub::before{ content:'·'; margin-right:.9em; opacity:.65; }
+  body.ring .kicker, body.ring .kicker-sub{ color: rgba(245,242,236,.5); }
+
+  main{
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ---------- 台詞（兩層疊在一起：紙上的字 / 被黑影蓋到才反白） ---------- */
+  .quote-wrap{ position: relative; width: min(92%, 600px); }
+
+  .line{
+    margin:0;
+    font-size: clamp(17px, 1.9vw, 25px);
+    line-height: 1.64;
+    font-style: italic;
+    letter-spacing: .004em;
+    color: inherit;
+    transition: color var(--t-slow) var(--ease);
+  }
+  .line .en{ display:block; }
+  .line .zh{
+    display:block; margin-top: .95em;
+    font-family: var(--sans); font-style: normal;
+    font-size: .8em; letter-spacing: .1em; line-height: 1.95;
+    color: rgba(16,16,18,.72);
+    transition: color var(--t-slow) var(--ease);
+  }
+  body.ring .line .zh{ color: rgba(245,242,236,.62); }
+
+  /* ---------- 兩個入口 ---------- */
+  nav{
+    width: min(92%, 600px);
+    margin-top: clamp(30px, 6vh, 56px);
+    display: flex; flex-direction: column;
+  }
+
+  .entry{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(12px, 1.8vw, 22px);
+    padding: clamp(13px, 2vh, 19px) 0;
+    border-top: 1px solid rgba(16,16,18,.13);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--t-slow) var(--ease);
+  }
+  .entry:last-child{ border-bottom: 1px solid rgba(16,16,18,.13); }
+  body.ring .entry{ border-color: rgba(245,242,236,.18); }
+
+  .entry .n{
+    font-family: var(--sans);
+    font-size: 10px; letter-spacing: .2em;
+    color: var(--muted);
+    text-align: left;
+    transition: color var(--t-fast) var(--ease);
+  }
+  body.ring .entry .n{ color: rgba(245,242,236,.45); }
+
+  .entry .t{
+    font-family: var(--sans);
+    font-size: clamp(18px, 2.3vw, 26px);
+    letter-spacing: .2em;
+    font-weight: 300;
+    text-align: left;
+    transition: letter-spacing var(--t-mid) var(--ease);
+  }
+
+  .entry .en{
+    font-style: italic;
+    font-size: clamp(12px, 1.1vw, 15px);
+    color: var(--muted);
+    transition: color var(--t-fast) var(--ease), transform var(--t-mid) var(--ease);
+  }
+  .entry .en::after{
+    content: '→';
+    display: inline-block;
+    margin-left: .55em;
+    font-style: normal;
+    opacity: .55;
+    transform: translateX(0);
+    transition: transform var(--t-mid) var(--ease), opacity var(--t-fast);
+  }
+  body.ring .entry .en{ color: rgba(245,242,236,.6); }
+
+  .entry:hover .n,
+  .entry:focus-visible .n{ color: var(--accent); }
+  .entry:hover .t,
+  .entry:focus-visible .t{ letter-spacing: .3em; }
+  .entry:hover .en::after,
+  .entry:focus-visible .en::after{ transform: translateX(5px); opacity: 1; }
+  .entry:focus-visible{ outline: none; }
+  .entry:focus-visible .t{ color: var(--accent); }
+
+  /* ---------- 頁尾：刻度尺 ---------- */
+  footer{
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 20px;
+    padding-top: clamp(10px, 1.6vh, 18px);
+  }
+  .ruler{
+    flex: 1;
+    height: 18px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    max-width: 420px;
+  }
+  .tick{
+    width: 1px; height: 4px;
+    background: #a9a29a;
+    transition: height .18s ease, opacity .18s ease, background var(--t-slow) var(--ease);
+  }
+  .tick.major{ height: 8px; }
+  body.ring .tick{ background: var(--hair-dark); }
+
+  .mark{
+    position: absolute;
+    z-index: 7;                 /* 在黑影之上 */
+    right: clamp(20px, 5.5vw, 76px);
+    bottom: clamp(16px, 3.4vh, 34px);
+    margin: 0;
+    line-height: 1;
+    font-family: var(--sans);
+    font-size: 10px; letter-spacing: .3em;
+    color: var(--muted);
+    transition: color .34s ease, text-shadow .34s ease;
+    pointer-events: none;
+  }
+  /* 被黑影掃到時翻成紙白（跟 Ring 暗場裡的待遇一樣） */
+  body.lit-mark .mark{
+    color: var(--paper);
+    text-shadow: 0 0 18px rgba(245,242,236,.3), 0 0 44px rgba(245,242,236,.14);
+  }
+  body.ring .mark{ color: rgba(245,242,236,.45); }
+
+  /* ---------- 斜切黑影（Forever 的機制） ---------- */
+  .slice{
+    position: absolute;
+    left: 100%; top: 100%;
+    z-index: 5;
+    will-change: transform;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    background: linear-gradient(180deg,
+      rgba(16,16,18,0) 0%,
+      rgba(16,16,18,0) calc(50% - 36px),
+      rgba(16,16,18,.72) calc(50% - 9px),
+      rgba(16,16,18,.94) calc(50% - 2px),
+      var(--ink) calc(50% + 4px),
+      var(--ink) 100%);
+  }
+
+  /* ---------- 紙的顆粒 ---------- */
+  .grain{
+    position:absolute; inset:0; z-index:6;
+    pointer-events:none;
+    opacity:.045;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+  }
+
+  @media (max-aspect-ratio: 3/4){
+    .quote-wrap{ width: 100%; }
+    nav{ width: 100%; }
+    .line{ font-size: 16px; }
+    .halo{ left: 50%; top: 12%; width: 56vmin; }
+  }
+  @media (max-height: 520px){
+    .line{ font-size: 13px; }
+    .line .zh{ margin-top:.6em; }
+    nav{ margin-top: 16px; }
+    .entry{ padding: 8px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <div class="veil" aria-hidden="true"></div>
+  <div class="halo" aria-hidden="true"><div class="halo-core"></div></div>
+
+  <div class="page">
+
+    <header>
+      <p class="kicker">JUJU</p>
+      <p class="kicker-sub">兩件關於同一個詞的小品</p>
+    </header>
+
+    <main>
+      <div class="quote-wrap">
+        <p class="line" id="quoteBase">
+          <span class="en">“Forever and forever and forever,” he murmured.</span>
+          <span class="zh">他喃喃地說：「永遠，永遠，永遠。」</span>
+        </p>
+      </div>
+
+      <nav>
+        <a class="entry" href="forever.html" data-mode="forever">
+          <span class="n">01</span>
+          <span class="t">永遠</span>
+          <span class="en">forever</span>
+        </a>
+        <a class="entry" href="ring/index.html" data-mode="ring">
+          <span class="n">02</span>
+          <span class="t">我願意</span>
+          <span class="en">priceless</span>
+        </a>
+      </nav>
+    </main>
+
+    <footer>
+      <div class="ruler" id="ruler" aria-hidden="true"></div>
+    </footer>
+
+  </div>
+
+  <!-- 署名獨立成舞台上的一層：要能被黑影蓋到、又要翻白浮在黑影之上 -->
+  <p class="mark">wolfheluo</p>
+
+  <div class="slice" id="slice" aria-hidden="true"></div>
+  <div class="grain"></div>
+</div>
+
+<div class="curtain" aria-hidden="true"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const stage  = document.getElementById('stage');
+  const slice  = document.getElementById('slice');
+
+  /* 與 forever.html 完全相同的斜切常數 */
+  const SLANT = 75;
+  const RAD   = SLANT * Math.PI / 180;
+  const SX    = Math.sin(RAD);
+  const CY    = Math.cos(RAD);
+
+  let dMax = 0;
+  const REST = 60;                       /* 靜止時把黑影推出去，畫面是乾淨的紙 */
+  let target = -REST, current = -REST, raf = 0, lastT = 0;
+  const TAU = 0.1;
+
+  /* ---------- 黑影尺寸 ---------- */
+  function sizeSlice(){
+    const W = stage.clientWidth, H = stage.clientHeight;
+    dMax = W * SX + H * CY;
+    const h = 2 * dMax + 8;
+    const w = 2 * Math.max(W * CY, H * SX) + 8;
+    slice.style.width  = w.toFixed(1) + 'px';
+    slice.style.height = h.toFixed(1) + 'px';
+    slice.style.marginLeft = (-w / 2).toFixed(1) + 'px';
+    slice.style.marginTop  = (-h / 2).toFixed(1) + 'px';
+  }
+
+  /* ---------- 右下角署名：量它在法線上的位置 ---------- */
+  const mark = document.querySelector('.mark');
+  let markD = 0;
+
+  function measureMark(){
+    const b = mark.getBoundingClientRect();
+    const r = stage.getBoundingClientRect();
+    const cx = b.left - r.left + b.width / 2;
+    const cy = b.top  - r.top  + b.height / 2;
+    markD = (r.width - cx) * SX + (r.height - cy) * CY;
+  }
+
+  /* ---------- 阻尼跟隨 ---------- */
+  function step(t){
+    const dt = Math.min(0.05, Math.max(0.001, (t - lastT) / 1000));
+    lastT = t;
+    const k = 1 - Math.exp(-dt / TAU);
+    current += (target - current) * k;
+    if (Math.abs(target - current) < 0.2) current = target;
+
+    slice.style.transform =
+      'rotate(' + (-SLANT) + 'deg) translateY(' + (-current).toFixed(2) + 'px)';
+
+    /* 黑影的邊界越過署名中心 → 署名翻白 */
+    document.body.classList.toggle('lit-mark', current >= markD);
+
+    if (current !== target) raf = requestAnimationFrame(step);
+    else raf = 0;
+  }
+
+  function drive(to){
+    target = to;
+    if (!raf){ lastT = performance.now(); raf = requestAnimationFrame(step); }
+  }
+
+  /* ---------- 兩個入口的 hover 預覽 ---------- */
+  let mode = null;
+
+  function setMode(next){
+    mode = next;
+    document.body.classList.toggle('ring', next === 'ring');
+    if (next === 'forever') drive(dMax * 0.24);   /* 只在右緣掃進一條斜影，不動到文字 */
+    else drive(-REST);
+  }
+
+  document.querySelectorAll('.entry').forEach(a => {
+    a.addEventListener('pointerenter', () => setMode(a.dataset.mode));
+    a.addEventListener('focus', () => setMode(a.dataset.mode));
+    a.addEventListener('pointerleave', () => { if (mode === a.dataset.mode) setMode(null); });
+    a.addEventListener('blur', () => { if (mode === a.dataset.mode) setMode(null); });
+  });
+
+  /* 沒有 hover 時：紙面對游標有極小的反應（同 Forever，幅度 10%） */
+  stage.addEventListener('pointermove', e => {
+    if (mode) return;
+    if (e.pointerType === 'touch') return;
+    const r = stage.getBoundingClientRect();
+    const d = (r.right - e.clientX) * SX + (r.bottom - e.clientY) * CY;
+    drive(Math.min(dMax * 0.10, Math.max(0, d * 0.14)));
+  }, { passive: true });
+
+  stage.addEventListener('pointerleave', () => { if (!mode) drive(-REST); });
+
+  /* ---------- 刻度尺（從 Ring 借來的小物件） ---------- */
+  const ruler = document.getElementById('ruler');
+  const ticks = Array.from({ length: 81 }, (_, i) => {
+    const s = document.createElement('span');
+    s.className = i % 10 === 0 ? 'tick major' : 'tick';
+    ruler.append(s);
+    return s;
+  });
+  let hoverProgress = null;
+
+  function renderTicks(){
+    ticks.forEach((t, i) => {
+      const p = i / 80;
+      const hover = hoverProgress === null ? 0
+        : Math.exp(-Math.pow((p - hoverProgress) / .075, 2));
+      t.style.height = ((i % 10 === 0 ? 8 : 4) + 15 * hover) + 'px';
+      t.style.opacity = (0.5 + 0.5 * hover).toFixed(2);
+    });
+  }
+
+  ruler.addEventListener('pointermove', e => {
+    const b = ruler.getBoundingClientRect();
+    hoverProgress = Math.max(0, Math.min(1, (e.clientX - b.left) / b.width));
+    renderTicks();
+  });
+  ruler.addEventListener('pointerleave', () => { hoverProgress = null; renderTicks(); });
+  renderTicks();
+
+  /* ---------- 尺寸 ---------- */
+  function relayout(){
+    sizeSlice();
+    measureMark();
+    slice.style.transform = 'rotate(' + (-SLANT) + 'deg) translateY(' + (-current).toFixed(2) + 'px)';
+    document.body.classList.toggle('lit-mark', current >= markD);
+  }
+
+  let rt;
+  window.addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      /* 重新計算後仍停留在原本的比例 */
+      const ratio = dMax ? (current + REST) / dMax : 0;
+      relayout();
+      current = target = -REST + dMax * ratio;
+      relayout();
+    }, 100);
+  });
+
+  relayout();
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(relayout);
+  }
+  /* 過場結束後重新量一次（紙退開前 .stage 還帶著 0.35% 的縮放） */
+  window.addEventListener('juju:reveal', relayout);
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

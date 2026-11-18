@@ -1,0 +1,51 @@
+/* ============================================================
+   JUJU — 頁與頁之間
+   同一張紙蓋上來、再退開；兩邊的內容各縮 0.4~0.8%，
+   像紙被手掌壓了一下，而不是硬切。
+   ============================================================ */
+
+.curtain{
+  position: fixed; inset: 0; z-index: 90;
+  background: var(--paper);
+  opacity: 0;
+  pointer-events: none;
+  /* 比 var(--ease) 更平緩：不要一按就衝到八成，讓紙慢慢蓋上來 */
+  transition: opacity .34s cubic-bezier(.35,0,.2,1);
+}
+
+/* 過場也是同一張有顆粒的紙，不是一片死白 */
+.curtain::after{
+  content: '';
+  position: absolute; inset: 0;
+  opacity: .045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)'/></svg>");
+}
+
+html.nav-out .curtain{ opacity: 1; pointer-events: auto; }
+html.nav-arrive .curtain{ opacity: 1; transition: none; }
+
+/* ---------- 內容的微小位移 ---------- */
+.stage,
+.experience{
+  transform-origin: 50% 46%;
+  transition: transform .5s cubic-bezier(.22,.61,.36,1);   /* 紙退開時，內容慢慢回到 100% */
+}
+
+html.nav-out .stage,
+html.nav-out .experience{
+  transform: scale(.9925);
+  will-change: transform;
+  transition: transform .34s cubic-bezier(.35,0,.2,1);   /* 出去跟紙同步 */
+}
+
+html.nav-arrive .stage,
+html.nav-arrive .experience{
+  transform: scale(.9965);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .curtain{ transition: none; }
+  html.nav-out .stage, html.nav-out .experience,
+  html.nav-arrive .stage, html.nav-arrive .experience{ transform: none; transition: none; }
+}
