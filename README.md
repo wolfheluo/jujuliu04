@@ -7,12 +7,12 @@
 ## 結構
 
 ```
-index.html        封面：hover「永遠」→ 斜切黑影掃入；hover「我願意」→ 暗場與光圈
-forever.html      永遠：一片 75° 斜切的黑影，游標走到哪，光就切到哪
-ring/             我願意：拖動刻度，從 ¥1,750,000 走到 Priceless
-assets/           15 張去背戒指（PNG，alpha）
-tokens.css        紙、墨、金、字、三檔時間
-nav.css / nav.js  頁與頁之間：同一張紙蓋上、再退開
+index.html          封面：hover「永遠」→ 斜切黑影掃入；hover「我願意」→ 暗場與光圈
+forever/index.html  永遠：一片 75° 斜切的黑影，游標走到哪，光就切到哪
+ring/index.html     我願意：拖動刻度，從 ¥1,750,000 走到 Priceless
+assets/             15 張去背戒指（PNG，alpha）
+tokens.css          紙、墨、金、字、三檔時間
+nav.css / nav.js    頁與頁之間：同一張紙蓋上、再退開
 ```
 
 ## 幾件事
